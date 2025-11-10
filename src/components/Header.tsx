@@ -3,11 +3,13 @@
  * Muestra el título principal de la aplicación.
  */
 import React from 'react';
+import logokoajs from '../assets/logo-koaj.png';
 
 const Header: React.FC = () => {
   return (
     <header>
       <div className="logo-header">
+        <img src={logokoajs} alt="Logo KOAJ" />
 
       </div>
       {/* Título principal */}
