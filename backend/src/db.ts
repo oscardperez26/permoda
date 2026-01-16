@@ -1,7 +1,3 @@
-/**
- * src/db.ts
- * Configuración de conexión a PostgreSQL usando pg Pool (Render / local)
- */
 import { Pool } from "pg";
 
 const connectionString = process.env.DATABASE_URL;
@@ -9,8 +5,10 @@ const connectionString = process.env.DATABASE_URL;
 export const pool = connectionString
   ? new Pool({
       connectionString,
-      // Render suele requerir SSL para Postgres gestionado
       ssl: { rejectUnauthorized: false },
+      max: 10,
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 5000,
     })
   : new Pool({
       user: process.env.DB_USER || "postgres",
