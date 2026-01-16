@@ -1,25 +1,31 @@
 /**
  * src/db.ts
- * Configuración de conexión a PostgreSQL usando pg Pool
+ * Configuración de conexión a PostgreSQL usando pg Pool (Render / local)
  */
-
 import { Pool } from "pg";
 
-// Configuración de la base de datos
-export const pool = new Pool({
-  user: "postgres",         // Usuario PostgreSQL
-  host: "localhost",           // Servidor (IP o localhost)
-  database: "permoda",         // Base de datos
-  password: "admin1234",   // Contraseña
-  port: 5432,                  // Puerto por defecto PostgreSQL
-});
+const connectionString = process.env.DATABASE_URL;
+
+export const pool = connectionString
+  ? new Pool({
+      connectionString,
+      // Render suele requerir SSL para Postgres gestionado
+      ssl: { rejectUnauthorized: false },
+    })
+  : new Pool({
+      user: process.env.DB_USER || "postgres",
+      host: process.env.DB_HOST || "localhost",
+      database: process.env.DB_NAME || "permoda",
+      password: process.env.DB_PASSWORD || "admin1234",
+      port: Number(process.env.DB_PORT || 5432),
+    });
 
 // Test de conexión
-pool.connect((err, client, release) => {
-  if (err) {
-    console.error("Error conectando a PostgreSQL:", err);
-  } else {
+pool.connect()
+  .then(client => {
     console.log("Conectado a PostgreSQL");
-    release();
-  }
-});
+    client.release();
+  })
+  .catch(err => {
+    console.error("Error conectando a PostgreSQL:", err);
+  });
