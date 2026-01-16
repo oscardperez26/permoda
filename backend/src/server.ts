@@ -19,6 +19,11 @@ app.use(cors({
 })); // permite todas las conexiones       // Permite que el frontend acceda a la API
 app.use(express.json()); // Parseo de JSON automáticamente
 
+app.get("/", (req, res) => {
+  res.status(200).send("API Permoda OK  Usa /api/products");
+});
+
+
 // Rutas
 app.use("/api/products", productsRouter);
 
