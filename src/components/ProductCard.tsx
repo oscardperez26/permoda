@@ -37,7 +37,7 @@
     }
 
         // decimales para el rpe aqui vamos a formatear el precio con decimales 
-    const n = Number(String(product.nuevo_precio).replace(/[^\d-]/g, ''));
+    //const n = Number(String(product.nuevo_precio).replace(/[^\d-]/g, ''));
    // const precioFormateado = new Intl.NumberFormat('es-CO', {
      // minimumFractionDigits: 0,
       //maximumFractionDigits: 0,
