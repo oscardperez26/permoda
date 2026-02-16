@@ -26,7 +26,7 @@ const App: React.FC = () => {
    */
 const handleSearch = async (code: string) => {
   try {
-    const data = await getProductBycod(code); // consulta el backend
+    const data = await getProductBycod(code); // ahora consulta Supabase
     console.log("Producto recibido:", data);
     setProduct(data); // actualiza el estado
   } catch (error) {
@@ -34,7 +34,6 @@ const handleSearch = async (code: string) => {
     setProduct(null);
   }
 };
-
 
   return (
     // Contenedor principal centrado

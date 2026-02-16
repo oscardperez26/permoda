@@ -1,17 +1,27 @@
+// services/api.ts
+import { createClient } from '@supabase/supabase-js';
+
+// 🔹 Tus datos de Supabase
+const SUPABASE_URL = 'https://nhqwwqbbuyomvtnnqcpu.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ocXd3d...';
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 /**
- * api.ts
- * Servicio para consumir la API del backend.
+ * getProductBycod
+ * Consulta la tabla 'data' por código de barras
  */
-
-const BASE_URL = 'https://permoda.onrender.com/api/products';
-
 export const getProductBycod = async (ean: string) => {
-  try {
-    const response = await fetch(`${BASE_URL}/${ean}`);
-    if (!response.ok) return null;
-    return await response.json();
-  } catch (error) {
+  const { data, error } = await supabase
+    .from('data')       // tu tabla en Supabase
+    .select('*')
+    .eq('codbarras', ean)
+    .single();          // devuelve un solo registro
+
+  if (error) {
     console.error('Error consultando producto:', error);
     return null;
   }
+
+  return data;
 };
