@@ -15,7 +15,7 @@ export const getProductBycod = async (ean: string) => {
   const { data, error } = await supabase
     .from('data')       // tu tabla en Supabase
     .select('*')
-    .eq('codbarras', ean)
+    .eq('CODBARRAS', ean)
     .single();          // devuelve un solo registro
 
   if (error) {

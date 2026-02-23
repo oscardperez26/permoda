@@ -9,16 +9,16 @@
   import React from 'react';
 
   interface Product {
-    codbarras: string;
-    referencia: string;
-    color: string;
-    talla: string;
-    nuevo_precio: number;
-    descripcion: string;
-    linea: string;
-    genero: string;
+    CODBARRAS: string;
+    REFERENCIA: string;
+    COLOR: string;
+    TALLA: string;
+    DESCRIPCION: string;
+    LINEA: string;
+    GENERO: string;
     imagenes: string;
     observacion: string;
+    bruto: string;
     
   }
 
@@ -47,36 +47,41 @@
     return (
     <div className="card">
       <div className="card-content">
-        <img src={product.imagenes} alt={product.referencia} className="product-image" />
+        <img src={product.imagenes} alt={product.REFERENCIA} className="product-image" />
 
         <div className="card-info">
+          
+          <div className="info-row">
+            <span className="title-card">Precio Bruto</span>
+            <span className="description-card">{product.bruto}</span>
+          </div>
           <div className="info-row">
             <span className="title-card">referencia</span>
-            <span className="description-card">{product.referencia}</span>
+            <span className="description-card">{product.REFERENCIA}</span>
           </div>
           <div className="info-row">
             <span className="title-card">Código</span>
-            <span className="description-card">{product.codbarras}</span>
+            <span className="description-card">{product.CODBARRAS}</span>
           </div>
           <div className="info-row">
             <span className="title-card">Color</span>
-            <span className="description-card">{product.color}</span>
+            <span className="description-card">{product.COLOR}</span>
           </div>
           <div className="info-row">
             <span className="title-card">Talla</span>
-            <span className="description-card">{product.talla}</span>
+            <span className="description-card">{product.TALLA}</span>
           </div>
           <div className="info-row">
             <span className="title-card">Descripción</span>
-            <span className="description-card">{product.descripcion}</span>
+            <span className="description-card">{product.DESCRIPCION}</span>
           </div>
           <div className="info-row">
             <span className="title-card">Línea</span>
-            <span className="description-card">{product.linea}</span>
+            <span className="description-card">{product.LINEA}</span>
           </div>
           <div className="info-row">
             <span className="title-card">Genero</span>
-            <span className="description-card">{product.genero}</span>
+            <span className="description-card">{product.GENERO}</span>
           </div>
           
         </div>
