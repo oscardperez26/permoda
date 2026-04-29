@@ -1,97 +1,93 @@
-  /**
-   * Componente ProductCard
-   * Muestra los detalles del producto encontrado.
-   * 
-   * Props:
-   * - product: objeto con la información del producto o null si no se encuentra.
-   */
+import React from 'react';
 
-  import React from 'react';
+interface Product {
+  CODBARRAS: string;
+  REFERENCIA: string;
+  COLOR: string;
+  TALLA: string;
+  DESCRIPCION: string;
+  LINEA: string;
+  GENERO: string;
+  imagenes: string;
+  observacion: string;
+  bruto: string;
+}
 
-  interface Product {
-    CODBARRAS: string;
-    REFERENCIA: string;
-    COLOR: string;
-    TALLA: string;
-    DESCRIPCION: string;
-    LINEA: string;
-    GENERO: string;
-    imagenes: string;
-    observacion: string;
-    bruto: string;
-    
-  }
+interface Props {
+  product: Product | null;
+  notFound?: boolean;
+}
 
-  interface Props {
-    product: Product | null;
-  }
-
-  const ProductCard: React.FC<Props> = ({ product }) => {
-    // Si no hay producto, mostramos un mensaje de aviso
-    if (!product) {
-      return (
-        <p style={{ marginTop: '20px', textAlign: 'center', color: '#888' }}>
-          Ingrese un código válido o escanee un producto.
-        </p>
-      );
-    }
-
-        // decimales para el rpe aqui vamos a formatear el precio con decimales 
-    //const n = Number(String(product.nuevo_precio).replace(/[^\d-]/g, ''));
-   // const precioFormateado = new Intl.NumberFormat('es-CO', {
-     // minimumFractionDigits: 0,
-      //maximumFractionDigits: 0,
-    //}).format(n); // -> "249.900"
-
-    // Si el producto existe, mostramos su información
+const ProductCard: React.FC<Props> = ({ product, notFound }) => {
+  if (notFound) {
     return (
-    <div className="card">
-      <div className="card-content">
-        <img src={product.imagenes} alt={product.REFERENCIA} className="product-image" />
+      <div className="not-found">
+        <div className="not-found-icon">🔍</div>
+        <p>No se encontró ningún producto con ese código.<br />Verifica e intenta de nuevo.</p>
+      </div>
+    );
+  }
 
-        <div className="card-info">
-          
-          <div className="info-row">
-            <span className="title-card">Precio Bruto</span>
-            <span className="description-card">{product.bruto}</span>
-          </div>
-          <div className="info-row">
-            <span className="title-card">referencia</span>
-            <span className="description-card">{product.REFERENCIA}</span>
-          </div>
-          <div className="info-row">
-            <span className="title-card">Código</span>
-            <span className="description-card">{product.CODBARRAS}</span>
-          </div>
-          <div className="info-row">
-            <span className="title-card">Color</span>
-            <span className="description-card">{product.COLOR}</span>
-          </div>
-          <div className="info-row">
-            <span className="title-card">Talla</span>
-            <span className="description-card">{product.TALLA}</span>
-          </div>
-          <div className="info-row">
-            <span className="title-card">Descripción</span>
-            <span className="description-card">{product.DESCRIPCION}</span>
-          </div>
-          <div className="info-row">
-            <span className="title-card">Línea</span>
-            <span className="description-card">{product.LINEA}</span>
-          </div>
-          <div className="info-row">
-            <span className="title-card">Genero</span>
-            <span className="description-card">{product.GENERO}</span>
-          </div>
-          
+  if (!product) return null;
+
+  const formatPrice = (raw: string) => {
+    const n = Number(String(raw).replace(/[^\d]/g, ''));
+    if (isNaN(n)) return raw;
+    return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(n);
+  };
+
+  const fields = [
+    { label: 'Descripción', value: product.DESCRIPCION },
+    { label: 'Color',       value: product.COLOR },
+    { label: 'Talla',       value: product.TALLA },
+    { label: 'Línea',       value: product.LINEA },
+    { label: 'Género',      value: product.GENERO },
+    { label: 'Código',      value: product.CODBARRAS },
+  ];
+
+  return (
+    <div className="product-card">
+      {/* Header negro con referencia */}
+      <div className="product-card-header">
+        <span className="product-badge">Producto encontrado</span>
+        <span className="product-ref">{product.REFERENCIA}</span>
+      </div>
+
+      {/* Cuerpo: imagen + info */}
+      <div className="product-body">
+        <div className="product-image-wrap">
+          {product.imagenes ? (
+            <img src={product.imagenes} alt={product.REFERENCIA} />
+          ) : (
+            <div className="product-image-placeholder">📦</div>
+          )}
+        </div>
+        <div className="product-info">
+          {fields.map(({ label, value }) =>
+            value ? (
+              <div className="info-item" key={label}>
+                <span className="info-label">{label}</span>
+                <span className="info-value">{value}</span>
+              </div>
+            ) : null
+          )}
         </div>
       </div>
 
-      <div className="card-footer">
-        <span className="price-label">observacion</span>
-        <span className="price-value">{product.observacion}</span>
+      {/* Barra de precio */}
+      <div className="product-price-bar">
+        <span className="price-label">Precio bruto</span>
+        <span className="price-value">{formatPrice(product.bruto)}</span>
       </div>
-    </div>);
-  };
 
-  export default ProductCard;
+      {/* Observación */}
+      {product.observacion && (
+        <div className="product-obs">
+          <strong>Observación:</strong> {product.observacion}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ProductCard;
